@@ -1,8 +1,7 @@
 LAB_SOURCE_FILE = __file__
 
-
-
 this_file = __file__
+
 
 def skip_add(n):
     """ Takes a number n and returns n + n-2 + n-4 + n-6 + ... + 0.
@@ -19,10 +18,10 @@ def skip_add(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    return sum([x for x in range(1, n + 1) if (n - x) % 2 == 0], 0)
 
 
 def summation(n, term):
-
     """Return the sum of the first n terms in the sequence defined by term.
     Implement using recursion!
 
@@ -41,6 +40,7 @@ def summation(n, term):
     """
     assert n >= 1
     "*** YOUR CODE HERE ***"
+    return sum([term(x) for x in range(1, n + 1)])
 
 
 def paths(m, n):
@@ -58,6 +58,14 @@ def paths(m, n):
     """
     "*** YOUR CODE HERE ***"
 
+    def cal(x, y):
+        if x == m - 1 and y == n - 1:
+            return 1
+        if x > m - 1 or y > n - 1:
+            return 0
+        return cal(x + 1, y) + cal(x, y + 1)
+
+    return cal(0, 0)
 
 
 def max_subseq(n, t):
@@ -91,8 +99,8 @@ def max_subseq(n, t):
         125
     and of these, the maxumum number is 225, so our answer is 225.
 
-    >>> max_subseq(20125, 3)
-    225
+    >>> max_subseq(12345, 3)
+    345
     >>> max_subseq(20125, 5)
     20125
     >>> max_subseq(20125, 6) # note that 20125 == 020125
@@ -105,6 +113,12 @@ def max_subseq(n, t):
     5
     """
     "*** YOUR CODE HERE ***"
+
+    if n == 0 or t == 0:
+        return 0
+    with_last = max_subseq(n // 10, t - 1) * 10 + n % 10
+    without_last = max_subseq(n // 10, t)
+    return max(with_last, without_last)
 
 
 def add_chars(w1, w2):
@@ -134,4 +148,17 @@ def add_chars(w1, w2):
     True
     """
     "*** YOUR CODE HERE ***"
+    len1 = len(w1)
+    len2 = len(w2)
 
+    def helper(index1, index2):
+        if w1 == w2:
+            return ""
+        if index1 >= len1:
+            return w2[index2::1]
+        if w1[index1] == w2[index2]:
+            return add_chars(w1[index1 + 1::1], w2[index2 + 1::1])
+        else:
+            return w2[index2] + add_chars(w1[index1::1], w2[index2 + 1::1])
+
+    return helper(0, 0)
